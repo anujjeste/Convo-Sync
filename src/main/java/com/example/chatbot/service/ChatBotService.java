@@ -1,4 +1,4 @@
-package com.example.chatbot;
+package com.example.chatbot.service;
 
 import org.springframework.stereotype.Service;
 

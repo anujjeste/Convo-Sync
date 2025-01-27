@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017" # Expose MongoDB on the host machine
+    volumes:
+      - ./mongo-data:/data/db # Persistent storage for MongoDB
+    networks:
+      - chatbot-network
+
+  mongosh:
+    image: mongo:6.0
+    depends_on:
+      - mongodb
+    networks:
+      - chatbot-network
+    entrypoint: ["mongosh", "mongodb://mongodb:27017"]
+
+  chatbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: chatbot
+    ports:
+      - "8080:8080" # Expose Spring Boot app on port 8080
+    depends_on:
+      - mongodb
+    networks:
+      - chatbot-network
+
+networks:
+  chatbot-network:
+    driver: bridge
