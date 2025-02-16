@@ -13,18 +13,15 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
+        http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/chat/**").permitAll() // Allow WebSocket connections
-                        .requestMatchers("/ws/**").permitAll()   // Ensure WebSocket endpoints are accessible
+                        .requestMatchers("/chat/**", "/auth/**").permitAll() // Allow chat & auth endpoints
                         .anyRequest().authenticated()
                 )
-                .csrf(AbstractHttpConfigurer::disable)  // Disable CSRF (needed for WebSockets)
-                .headers(AbstractHttpConfigurer::disable) // 🔹 Disable security headers properly (fixes frameOptions issue)
-                .formLogin(AbstractHttpConfigurer::disable) // Disable default login
-                .httpBasic(AbstractHttpConfigurer::disable) // Disable basic auth
-                .build();
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF for simplicity
+                .formLogin(AbstractHttpConfigurer::disable) // No login form needed
+                .httpBasic(AbstractHttpConfigurer::disable); // No HTTP Basic Auth needed
+
+        return http.build();
     }
 }
-
-
