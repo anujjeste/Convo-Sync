@@ -1,70 +1,172 @@
-# Getting Started with Create React App
+# Chat Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Overview
 
-## Available Scripts
+This is a real-time chat application built using a **Spring Boot backend**, **PostgreSQL database**, and a **React (Vite) frontend**. The application allows users to send and receive messages via WebSockets. Future updates will include chatbot functionality. This project is work in progress.
 
-In the project directory, you can run:
+## **Technologies Used**
 
-### `npm start`
+### **Backend:**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Spring Boot (v3.4.2)
+- Spring Security
+- WebSockets (STOMP protocol)
+- PostgreSQL (v17.3)
+- Hibernate (JPA)
+- Maven (build tool)
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+### **Frontend:**
 
-### `npm test`
+- React (Vite-based project)
+- @stomp/stompjs (WebSocket handling)
+- SockJS-client
+- Tailwind CSS (for styling)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### **DevOps & Deployment:**
 
-### `npm run build`
+- Docker & Docker Compose
+- Nginx (serving frontend)
+- Git & GitHub for version control
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+---
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## **Setup & Installation**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### **Pre-requisites:**
 
-### `npm run eject`
+Ensure you have the following installed:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Docker & Docker Compose
+- Node.js (v18+ for frontend development)
+- Java 17 (for Spring Boot backend)
+- PostgreSQL (if running locally without Docker)
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### **1. Clone the Repository**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```bash
+ git clone https://github.com/anujjeste/Java-chat-bot.git
+ cd Java-chat-bot
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### **2. Build & Run with Docker Compose**
 
-## Learn More
+```bash
+ docker-compose up --build
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This will start:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- PostgreSQL database
+- Backend service (Spring Boot)
+- Frontend service (React)
 
-### Code Splitting
+> Ensure ports `3000`, `8080`, and `5432` are free.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### **3. Running Without Docker**
 
-### Analyzing the Bundle Size
+#### **Run PostgreSQL (Manually)**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+If you prefer running PostgreSQL manually, create a database:
 
-### Making a Progressive Web App
+```sql
+ CREATE DATABASE chatapp_db;
+ CREATE USER chatapp_admin WITH PASSWORD 'chatapp_password';
+ ALTER ROLE chatapp_admin SET client_encoding TO 'utf8';
+ ALTER ROLE chatapp_admin SET default_transaction_isolation TO 'read committed';
+ ALTER ROLE chatapp_admin SET timezone TO 'UTC';
+ GRANT ALL PRIVILEGES ON DATABASE chatapp_db TO chatapp_admin;
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+#### **Start Backend (Spring Boot)**
 
-### Advanced Configuration
+```bash
+ cd backend
+ mvn clean package
+ java -jar target/demo-0.0.1-SNAPSHOT.jar
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+#### **Start Frontend (React-Vite)**
 
-### Deployment
+```bash
+ cd frontend
+ npm install
+ npm run dev
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+## **Project Structure**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+```
+Java-chat-bot/
+│── backend/                   # Spring Boot Backend
+│   ├── src/main/java/
+│   │   ├── com/example/chatbot/config/   # WebSocket & Security Configurations
+│   │   ├── com/example/chatbot/controller/ # API Controllers
+│   │   ├── com/example/chatbot/service/   # Business Logic
+│   │   ├── com/example/chatbot/model/     # Entities & DTOs
+│   │   ├── com/example/chatbot/repository/ # JPA Repository
+│   ├── application.properties  # Database and App Configurations
+│   ├── pom.xml                 # Maven Build File
+│
+│── frontend/                  # React Frontend
+│   ├── src/
+│   │   ├── components/
+│   │   ├── hooks/useChatWebSocket.js  # WebSocket Hook
+│   │   ├── App.jsx
+│   │   ├── main.jsx
+│   ├── package.json            # Node Dependencies
+│   ├── vite.config.js          # Vite Configuration
+│
+│── docker-compose.yml          # Docker Orchestration
+│── Dockerfile (Backend)
+│── chatbot-ui/Dockerfile (Frontend)
+```
+
+---
+
+## **API Endpoints**
+
+| Method | Endpoint     | Description         |
+| ------ | ------------ | ------------------- |
+| GET    | `/messages`  | Fetch all messages  |
+| POST   | `/messages`  | Send a new message  |
+| GET    | `/chat/{id}` | Get chat by ID      |
+| POST   | `/register`  | Register a new user |
+
+---
+
+## **Common Issues & Fixes**
+
+1. **Backend fails due to PostgreSQL authentication**
+
+   - Ensure PostgreSQL is running and credentials match.
+   - Run `docker-compose down -v` to clear old volumes.
+
+2. **Frontend WebSocket connection issue**
+
+   - Ensure `VITE_WS_URL` is correctly pointing to the backend.
+   - Check browser console logs for WebSocket errors.
+
+3. **Vite build failure (Missing dependencies)**
+
+   - Run `rm -rf node_modules package-lock.json && npm install` inside `frontend/`
+
+---
+
+## **Future Updates**
+
+- Chatbot service integration (AI-powered responses)
+- User authentication & JWT security
+- Dockerized production deployment
+
+---
+
+## **Contributing**
+
+Pull requests are welcome! Open an issue first to discuss major changes.
+
+**Author:** Anuj Jeste\
+**GitHub:** [anujjeste](https://github.com/anujjeste)
+
+
