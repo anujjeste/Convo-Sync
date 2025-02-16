@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@stomp/stompjs": "^7.0.0"
+  },
+  "scripts": {
+    "build": "echo 'No build step needed for backend'"
+  }
+}
+

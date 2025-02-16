@@ -2,20 +2,21 @@ package com.example.chatbot.service;
 
 import com.example.chatbot.entity.Message;
 import com.example.chatbot.repository.MessageRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
 public class MessageService {
 
-    @Autowired
-    private MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
+
+    public MessageService(MessageRepository messageRepository) {
+        this.messageRepository = messageRepository;
+    }
 
     // Save a message
-    public void saveMessage(Message message) {
-        messageRepository.save(message);
+    public Message saveMessage(Message message) {
+        return messageRepository.save(message);
     }
 
     // Retrieve messages for a specific recipient
@@ -23,3 +24,4 @@ public class MessageService {
         return messageRepository.findByRecipient(recipient);
     }
 }
+

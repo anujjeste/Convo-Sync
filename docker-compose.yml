@@ -1,35 +1,56 @@
 version: '3.8'
+
 services:
-  mongodb:
-    image: mongo:6.0
-    container_name: mongodb
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: chatapp_db
+      POSTGRES_USER: chatapp_admin
+      POSTGRES_PASSWORD: chatapp_password
     ports:
-      - "27017:27017" # Expose MongoDB on the host machine
+      - "5432:5432"
     volumes:
-      - ./mongo-data:/data/db # Persistent storage for MongoDB
+      - postgres_data:/var/lib/postgresql/data
     networks:
       - chatbot-network
+ 
+      
 
-  mongosh:
-    image: mongo:6.0
-    depends_on:
-      - mongodb
-    networks:
-      - chatbot-network
-    entrypoint: ["mongosh", "mongodb://mongodb:27017"]
-
-  chatbot:
+  backend:
     build:
-      context: .
+      context: ./
       dockerfile: Dockerfile
-    container_name: chatbot
-    ports:
-      - "8080:8080" # Expose Spring Boot app on port 8080
+    container_name: backend
     depends_on:
-      - mongodb
+      - postgres
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/chatapp_db
+      SPRING_DATASOURCE_USERNAME: chatapp_admin
+      SPRING_DATASOURCE_PASSWORD: chatapp_password
+    ports:
+      - "8080:8080"
     networks:
       - chatbot-network
+
+  frontend:
+    build:
+      context: ./chatbot-ui
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    networks:
+      - chatbot-network
+    environment:
+      - VITE_WS_URL=ws://backend:8080/chat 
 
 networks:
   chatbot-network:
     driver: bridge
+
+volumes:
+   postgres_data:

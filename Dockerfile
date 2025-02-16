@@ -1,14 +1,14 @@
-# Use an official OpenJDK 17 image
+# Use an official OpenJDK runtime as a parent image
 FROM openjdk:17-jdk-slim
 
-# Set the working directory inside the container
+# Set the working directory
 WORKDIR /app
 
-# Copy the Spring Boot application JAR file into the container
-COPY target/chatbot.jar chatbot.jar
+# Copy the built JAR file into the container
+COPY target/demo-0.0.1-SNAPSHOT.jar chatbot.jar
 
-# Expose the port Spring Boot runs on
+# Expose port 8080
 EXPOSE 8080
 
-# Command to run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "chatbot.jar"]
+# Run the application
+CMD ["java", "-jar", "chatbot.jar"]

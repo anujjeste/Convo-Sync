@@ -1,4 +1,5 @@
 /home/anuj/Projects/demo/src/main/java/com/example/chatbot/ChatApplication.java
+/home/anuj/Projects/demo/src/main/java/com/example/chatbot/config/CorsConfig.java
 /home/anuj/Projects/demo/src/main/java/com/example/chatbot/config/WebSocketConfig.java
 /home/anuj/Projects/demo/src/main/java/com/example/chatbot/controller/ChatController.java
 /home/anuj/Projects/demo/src/main/java/com/example/chatbot/entity/Message.java

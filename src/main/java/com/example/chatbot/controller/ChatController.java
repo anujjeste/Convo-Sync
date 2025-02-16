@@ -21,16 +21,17 @@ public class ChatController {
     @SendTo("/topic/messages")
     public Message handleMessage(Message message) {
         // Save user message to the database
-        messageService.saveMessage(message);
+        Message savedUserMessage = messageService.saveMessage(message);
 
         // Get chatbot response if applicable
         String botResponse = chatBotService.getResponse(message.getContent());
         Message botMessage = new Message("Bot", botResponse, message.getSender(), System.currentTimeMillis());
 
         // Save bot response to the database
-        messageService.saveMessage(botMessage);
+        Message savedBotMessage = messageService.saveMessage(botMessage);
 
         // Return the bot's response
-        return botMessage;
+        return savedBotMessage;
     }
 }
+

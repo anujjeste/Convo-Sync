@@ -3,5 +3,7 @@ com/example/chatbot/repository/MessageRepository.class
 com/example/chatbot/config/WebSocketConfig.class
 com/example/chatbot/service/ChatBotService.class
 com/example/chatbot/service/MessageService.class
+com/example/chatbot/config/CorsConfig.class
 com/example/chatbot/entity/Message.class
+com/example/chatbot/config/CorsConfig$1.class
 com/example/chatbot/ChatApplication.class

@@ -1,12 +1,13 @@
 package com.example.chatbot.entity;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import jakarta.persistence.*;
 
-@Document(collection = "messages")
+@Entity
+@Table(name = "messages")
 public class Message {
     @Id
-    private String id;         // MongoDB's ObjectId
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;         // Auto-generated ID for PostgreSQL
     private String sender;     // Sender's name
     private String recipient;  // Recipient's name
     private String content;    // Message content
@@ -24,11 +25,11 @@ public class Message {
     }
 
     // Getters and Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -68,7 +69,7 @@ public class Message {
     @Override
     public String toString() {
         return "Message{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", sender='" + sender + '\'' +
                 ", recipient='" + recipient + '\'' +
                 ", content='" + content + '\'' +
