@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the built JAR file into the container
-COPY target/demo-0.0.1-SNAPSHOT.jar chatbot.jar
+COPY target/*.jar chatbot.jar
 
 # Expose port 8080
 EXPOSE 8080

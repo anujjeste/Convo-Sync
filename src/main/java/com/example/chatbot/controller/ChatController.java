@@ -1,9 +1,8 @@
 package com.example.chatbot.controller;
 
 import com.example.chatbot.entity.Message;
-import com.example.chatbot.service.ChatBotService;
 import com.example.chatbot.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -11,27 +10,19 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class ChatController {
 
-    @Autowired
-    private ChatBotService chatBotService;
+    private final MessageService messageService;
 
-    @Autowired
-    private MessageService messageService;
+    @Value("${websocket.broker.prefix}")
+    private String topicPrefix;
 
-    @MessageMapping("/sendMessage")
-    @SendTo("/topic/messages")
+    public ChatController(MessageService messageService) {
+        this.messageService = messageService;
+    }
+
+    @MessageMapping("/chat")
+    @SendTo("${websocket.broker.prefix}/messages")
     public Message handleMessage(Message message) {
-        // Save user message to the database
-        Message savedUserMessage = messageService.saveMessage(message);
-
-        // Get chatbot response if applicable
-        String botResponse = chatBotService.getResponse(message.getContent());
-        Message botMessage = new Message("Bot", botResponse, message.getSender(), System.currentTimeMillis());
-
-        // Save bot response to the database
-        Message savedBotMessage = messageService.saveMessage(botMessage);
-
-        // Return the bot's response
-        return savedBotMessage;
+        System.out.println("Received message: " + message.getContent());
+        return messageService.saveMessage(message);
     }
 }
-
