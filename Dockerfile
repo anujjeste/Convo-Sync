@@ -1,14 +1,5 @@
-# Use an official OpenJDK runtime as a parent image
-FROM openjdk:17-jdk-slim
-
-# Set the working directory
+FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
-
-# Copy the built JAR file into the container
-COPY target/*.jar chatbot.jar
-
-# Expose port 8080
+COPY target/chatbot-0.0.1-SNAPSHOT.jar chatbot.jar
 EXPOSE 8080
-
-# Run the application
-CMD ["java", "-jar", "chatbot.jar"]
+ENTRYPOINT ["java", "-jar", "chatbot.jar"]
